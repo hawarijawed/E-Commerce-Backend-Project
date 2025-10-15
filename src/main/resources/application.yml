@@ -5,9 +5,9 @@ spring:
   application:
     name: ecommerce-backend
   datasource:
-    url: jdbc:postgresql://localhost:5432/ecommerce_db?options=-c%20TimeZone=Asia/Kathmandu
-    username: postgres
-    password: jawedhawari123
+    url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}?options=-c%20TimeZone=Asia/Kathmandu
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
 
   jpa:
