@@ -1,0 +1,31 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: ecommerce-backend
+  datasource:
+    url: jdbc:postgresql://localhost:5432/ecommerce_db?options=-c%20TimeZone=Asia/Kathmandu
+    username: postgres
+    password: jawedhawari123
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update   # change to "validate" or "none" in production
+    show-sql: true
+    properties:
+      hibernate:
+        time_zone: Asia/Kathmandu
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /api-docs
