@@ -2,12 +2,10 @@ package com.ecommerce.ecommerce_backend.controller;
 
 import com.ecommerce.ecommerce_backend.models.Users;
 import com.ecommerce.ecommerce_backend.service.UserServices;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -15,12 +13,13 @@ import java.util.List;
 @RequestMapping("/api/user")
 public class UserController {
 
-    private final UserServices userServices;
-    public UserController(UserServices userServices){
-        this.userServices = userServices;
-    }
+    @Autowired
+    private UserServices userServices;
+//    public UserController(UserServices userServices){
+//        this.userServices = userServices;
+//    }
     @PostMapping("/add")
-    public ResponseEntity<?> addUser(Users user){
+    public ResponseEntity<?> addUser(@RequestBody Users user){
         Users savedUser = userServices.saveNewUser(user);
         if(savedUser == null){
             return new ResponseEntity<>("User Not Saved", HttpStatus.BAD_REQUEST);
