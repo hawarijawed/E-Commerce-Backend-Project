@@ -1,6 +1,7 @@
 package com.ecommerce.ecommerce_backend.controller;
 
 import com.ecommerce.ecommerce_backend.dto.Product.CreateProductPojo;
+import com.ecommerce.ecommerce_backend.dto.Product.UpdateProductPojo;
 import com.ecommerce.ecommerce_backend.models.Products;
 import com.ecommerce.ecommerce_backend.service.ProductAdminService;
 import jakarta.validation.Valid;
@@ -40,6 +41,26 @@ public class ProductAdminController {
     @GetMapping("/get/{id}")
     private Products getById(@PathVariable Long id){
         return productAdminService.getProductById(id);
+    }
+
+    //Delete product by id
+    @DeleteMapping("/delete/{id}")
+    private ResponseEntity<String> deleteProductById(@PathVariable Long id){
+        boolean deleted = productAdminService.deleteProductById(id);
+        if (deleted)
+            return new ResponseEntity<>("Product deleted successfully", HttpStatus.OK);
+        return new ResponseEntity<>("Product not found", HttpStatus.NOT_FOUND);
+    }
+
+    //Update the product
+    @PutMapping("/update")
+    private ResponseEntity<String> updateProduct(@RequestBody @Valid UpdateProductPojo productPojo){
+        boolean flag = productAdminService.updateProduct(productPojo);
+        if(flag){
+            return new ResponseEntity<>("Product updated Successfully", HttpStatus.ACCEPTED);
+        }
+
+        return new ResponseEntity<>("An error occurred", HttpStatus.BAD_REQUEST);
     }
 
 }
