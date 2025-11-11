@@ -70,6 +70,11 @@ public class ProductUserController {
         return new ResponseEntity<>(reviews,HttpStatus.FOUND);
     }
 
+    @PostMapping("/delete/{productId}")
+    public ResponseEntity<Boolean> deleteReviews(@PathVariable Long productId){
+        boolean flag = reviewService.deleteReview(productId);
+        return new ResponseEntity<>(flag, HttpStatus.ACCEPTED);
+    }
     @GetMapping("/search/{category}")
     public ResponseEntity<?> searchByCategory(@PathVariable String category){
         List<Products> product = productUserService.searchByCategory(category);

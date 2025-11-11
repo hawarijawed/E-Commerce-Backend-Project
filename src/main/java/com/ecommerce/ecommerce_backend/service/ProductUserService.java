@@ -49,6 +49,11 @@ public class ProductUserService {
     public List<Reviews> getReviews(Long productId){
         return reviewService.viewReviewsByProductId(productId);
     }
+
+    //delete review
+    public boolean deleteReview(Long id){
+        return reviewService.deleteReview(id);
+    }
     //search product by category
     public List<Products> searchByCategory(String category){
         return productRepository.findByCategory(category);

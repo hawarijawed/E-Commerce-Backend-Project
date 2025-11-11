@@ -7,7 +7,9 @@ import com.ecommerce.ecommerce_backend.repository.ProductRepository;
 import com.ecommerce.ecommerce_backend.repository.ReviewRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -40,7 +42,18 @@ public class ReviewService {
 
     //View Reviews
     public List<Reviews> viewReviewsByProductId(Long productId){
-        //return reviewRepository.findByProduct_Id(productId);
-        return reviewRepository.findAll();
+        return reviewRepository.findByProducts_Id(productId);
+    }
+
+    //Delete Reviews
+    @Transactional
+    public boolean deleteReview(Long id){
+        reviewRepository.deleteByProductsId(id);
+
+        List<Reviews> exists = reviewRepository.findByProducts_Id(id);
+        if(exists.isEmpty()){
+            return true;
+        }
+        return false;
     }
 }
