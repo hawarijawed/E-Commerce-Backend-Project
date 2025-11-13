@@ -72,7 +72,7 @@ public class ProductUserController {
 
     @PostMapping("/delete/{productId}")
     public ResponseEntity<Boolean> deleteReviews(@PathVariable Long productId){
-        boolean flag = reviewService.deleteReview(productId);
+        boolean flag = reviewService.deleteReviewsByProductId(productId);
         return new ResponseEntity<>(flag, HttpStatus.ACCEPTED);
     }
     @GetMapping("/search/{category}")

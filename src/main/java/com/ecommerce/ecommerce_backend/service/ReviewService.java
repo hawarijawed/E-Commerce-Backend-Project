@@ -46,14 +46,9 @@ public class ReviewService {
     }
 
     //Delete Reviews
-    @Transactional
-    public boolean deleteReview(Long id){
-        reviewRepository.deleteByProductsId(id);
+    public boolean deleteReviewsByProductId(Long id){
+        reviewRepository.deleteByProducts_Id(id);
 
-        List<Reviews> exists = reviewRepository.findByProducts_Id(id);
-        if(exists.isEmpty()){
-            return true;
-        }
-        return false;
+        return reviewRepository.findByProducts_Id(id).isEmpty();
     }
 }
