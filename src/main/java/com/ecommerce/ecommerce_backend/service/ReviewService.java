@@ -46,6 +46,8 @@ public class ReviewService {
     }
 
     //Delete Reviews
+
+    @Transactional
     public boolean deleteReviewsByProductId(Long id){
         reviewRepository.deleteByProducts_Id(id);
 

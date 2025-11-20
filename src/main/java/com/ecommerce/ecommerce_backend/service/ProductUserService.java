@@ -52,7 +52,7 @@ public class ProductUserService {
 
     //delete review
     public boolean deleteReview(Long id){
-        return reviewService.deleteReview(id);
+        return reviewService.deleteReviewsByProductId(id);
     }
     //search product by category
     public List<Products> searchByCategory(String category){
