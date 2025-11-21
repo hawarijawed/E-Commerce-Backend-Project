@@ -194,6 +194,19 @@ public class CartService {
         return "Cart updated successfully";
     }
 
+    @Transactional
+    public String clearCart(Long userId){
+        Cart cart = cartRepository.findByUserId(userId).orElseThrow(()->new RuntimeException("Cart not found"));
+
+        cartItemsRepository.deleteByCartId(cart.getId());
+
+        cart.setTotalPrice(BigDecimal.ZERO);
+
+        cartRepository.save(cart);
+
+        return "Cart cleared successfully";
+    }
+
 }
 
 //add item, remove item, update quantity, auto recalc price
