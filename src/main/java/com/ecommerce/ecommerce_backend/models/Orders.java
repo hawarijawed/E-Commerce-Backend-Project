@@ -1,5 +1,6 @@
 package com.ecommerce.ecommerce_backend.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -21,15 +22,14 @@ public class Orders {
     )
     private Users user;
 
-
     private LocalDateTime orderTime;
 
     private BigDecimal totalAmount;
 
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatusEnum;
-
-    @OneToMany
+    @JsonManagedReference
+    @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItems> orderItems = new ArrayList<>();
 
     private String paymentMethod;

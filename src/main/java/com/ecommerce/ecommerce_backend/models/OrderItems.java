@@ -1,5 +1,6 @@
 package com.ecommerce.ecommerce_backend.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -15,7 +16,8 @@ public class OrderItems {
     @JoinColumn(name = "product_id")
     private Products products;
     @ManyToOne
-    @JoinColumn(name = "order_id")
+    @JoinColumn(name = "order_id",nullable = false)
+    @JsonBackReference
     private Orders orders;
     private int quantity;
     private BigDecimal priceAtOrderTime;
