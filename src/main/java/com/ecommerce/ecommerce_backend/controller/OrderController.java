@@ -49,4 +49,11 @@ public class OrderController {
 
         return ResponseEntity.ok(order);
     }
+
+    @PatchMapping("/cancel/{orderId}/user/{userId}")
+    public ResponseEntity<String> cancelOrder(@PathVariable Long orderId, @PathVariable Long userId){
+        String res = orderServices.cancelOrder(orderId, userId);
+
+        return ResponseEntity.ok(res);
+    }
 }

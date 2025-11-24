@@ -17,6 +17,8 @@ public class EcommerceBackendApplication {
 		System.setProperty("DB_NAME", dotenv.get("DB_NAME"));
 		System.setProperty("DB_USERNAME", dotenv.get("DB_USERNAME"));
 		System.setProperty("DB_PASSWORD", dotenv.get("DB_PASSWORD"));
+		System.setProperty("SMTP_USERNAME", dotenv.get("SMTP_USERNAME"));
+		System.setProperty("SMTP_KEY", dotenv.get("SMTP_KEY"));
 		TimeZone.setDefault(TimeZone.getTimeZone("Asia/Kathmandu"));
 		SpringApplication.run(EcommerceBackendApplication.class, args);
 		//helper();

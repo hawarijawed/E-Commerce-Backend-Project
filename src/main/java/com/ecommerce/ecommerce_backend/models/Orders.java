@@ -28,6 +28,8 @@ public class Orders {
 
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatusEnum;
+    @Enumerated(EnumType.STRING)
+    private PaymentStatus paymentStatus;
     @JsonManagedReference
     @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItems> orderItems = new ArrayList<>();

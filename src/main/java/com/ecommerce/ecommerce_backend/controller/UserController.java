@@ -48,7 +48,7 @@ public class UserController {
     }
 
     @PostMapping("/update/{id}")
-    public ResponseEntity<?> updateById(@Valid @RequestBody UpdateUserPojo user, @PathVariable Long id){
+    public ResponseEntity<?> updateById(@RequestBody UpdateUserPojo user, @PathVariable Long id){
         Users newUser = userServices.updateUser(user, id);
         if(newUser == null){
             return new ResponseEntity<>("User with mentioned id not found", HttpStatus.BAD_REQUEST);

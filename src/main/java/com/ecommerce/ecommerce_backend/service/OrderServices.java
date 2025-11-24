@@ -152,7 +152,7 @@ public class OrderServices {
         Orders orders = new Orders();
         orders.setUser(cart.getUser());
         orders.setOrderTime(LocalDateTime.now());
-        orders.setOrderStatusEnum(OrderStatus.SHIPPED);
+        orders.setOrderStatusEnum(OrderStatus.PENDING);
         orders.setPaymentMethod(dto.getPaymentMethod());
         orders.setShippingAddress(dto.getShippingAddress());
         orders.setTotalAmount(cart.getTotalPrice());
@@ -188,4 +188,41 @@ public class OrderServices {
 
         return orders;
     }
+
+
+    @Transactional
+    public String cancelOrder(Long userId, Long orderId){
+        Orders order = ordersRepository.findByIdAndUserId(orderId, userId).orElseThrow(
+                ()-> new RuntimeException("Order does not exists")
+        );
+
+        //Check allowed cancellation states
+        if(order.getOrderStatusEnum() == OrderStatus.SHIPPED ||
+            order.getOrderStatusEnum() == OrderStatus.DELIVERED){
+            return "This order cannot be cancelled because it is already delivered";
+        }
+
+        //Restore stock for each item
+        List<OrderItems> items = orderItemsRepository.findByOrdersId(order.getId());
+
+        for(OrderItems item: items){
+            Products products = productRepository.findById(item.getProducts().getId())
+                    .orElseThrow(()-> new RuntimeException("Product Not found"));
+
+            products.setStockQuantity(products.getStockQuantity() + item.getQuantity());
+            productRepository.save(products);
+        }
+
+        //Update order Status
+        order.setOrderStatusEnum(OrderStatus.CANCELLED);
+        ordersRepository.save(order);
+
+        return "Order has been cancelled successfully";
+    }
+
+    /*
+    To be done later
+    1. Admin Update Order Status
+    2. Admin View Orders by Filter
+     */
 }
