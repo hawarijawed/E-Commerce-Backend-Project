@@ -40,7 +40,7 @@ public class PaymentService {
             ordersRepository.save(orders);
 //            log.info("Order status is processed");
             //Send order confirmation mail to customer
-            emailService.sendOrderConfirmation(orders);
+            emailService.sendOrderConfirmation(orders, orders.getOrderItems());
 
             return "Payment Success! Order confirmation mail has been sent to your account";
         } else if (dto.getStatus().equalsIgnoreCase("FAILED")) {

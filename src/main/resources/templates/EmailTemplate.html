@@ -1,0 +1,62 @@
+<!Doctype html>
+<html>
+<head>
+    <style>
+        .container {
+            font-family: Arial, sans-serif;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: #fafafa;
+        }
+        .header {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .product-table {
+            width: 100%;
+            margin-top: 15px;
+            border-collapse: collapse;
+        }
+        .product-table th, .product-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        .footer {
+            margin-top: 20px;
+            font-size: 13px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">Order Confirmation - Order #{{orderId}}</div>
+        <p>Hello {{userName}},</p>
+        <p>Your order has been successfully confirmed!</p>
+
+        <h3>Order Summary</h3>
+
+        <table class="product-table">
+            <tr>
+                <th>Product</th>
+                <th>Price (₹)</th>
+                <th>Qty</th>
+                <th>Total</th>
+            </tr>
+            {{productRows}}
+        </table>
+
+        <p><strong>Total Amount: ₹{{totalAmount}}</strong></p>
+        <p>Payment Method: {{paymentMethod}}</p>
+        <p>Shipping Address:<br>{{shippingAddress}}</p>
+
+        <div class="footer">
+            Thank you for shopping with us!<br>
+            - Ecommerce Team
+        </div>
+    </div>
+</body>
+</html>
