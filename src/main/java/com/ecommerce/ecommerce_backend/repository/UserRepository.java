@@ -3,6 +3,8 @@ package com.ecommerce.ecommerce_backend.repository;
 import com.ecommerce.ecommerce_backend.models.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserRepository extends JpaRepository<Users, Long> {
+import java.util.Optional;
 
+public interface UserRepository extends JpaRepository<Users, Long> {
+    Optional<Users> findByEmail(String email);
 }

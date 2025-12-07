@@ -22,17 +22,14 @@ public class Users {
     private String lastName;
     @Column(nullable = false, unique = true)
     private String email;
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String password;
     private String contact;
 
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private Role role = Role.ROLE_USER;
 
     private boolean enabled = true; // active or banned user
     private Date createdAt = new Date();
 
-    // Relations (will connect later)
-    // @OneToMany(mappedBy = "user")
-    // private List<Order> orders = new ArrayList<>();
 }

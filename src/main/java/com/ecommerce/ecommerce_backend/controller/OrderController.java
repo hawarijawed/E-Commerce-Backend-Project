@@ -1,8 +1,6 @@
 package com.ecommerce.ecommerce_backend.controller;
 
-import com.ecommerce.ecommerce_backend.dto.PlaceOrder.BuyNowDTO;
-import com.ecommerce.ecommerce_backend.dto.PlaceOrder.CheckoutOrderDTO;
-import com.ecommerce.ecommerce_backend.dto.PlaceOrder.OrderResponseDTO;
+import com.ecommerce.ecommerce_backend.dto.PlaceOrder.*;
 import com.ecommerce.ecommerce_backend.models.Orders;
 import com.ecommerce.ecommerce_backend.service.OrderServices;
 import jakarta.validation.Valid;
@@ -55,5 +53,21 @@ public class OrderController {
         String res = orderServices.cancelOrder(orderId, userId);
 
         return ResponseEntity.ok(res);
+    }
+
+    @GetMapping("/details/{orderId}/{userId}")
+    public ResponseEntity<OrderDetailsDTO> getOrderDetails(@PathVariable Long orderId, @PathVariable Long userId){
+        OrderDetailsDTO detailsDTO = orderServices.viewOrderDetails(orderId, userId);
+        return new ResponseEntity<>(detailsDTO, HttpStatus.OK);
+    }
+    
+    @GetMapping("/track/{orderId}/{userId}")
+    public ResponseEntity<?> trackOrder(@PathVariable Long orderId, @PathVariable Long userId){
+        return ResponseEntity.ok(orderServices.trackOrder(orderId,userId));
+    }
+
+    @PutMapping("/admin/order/update-status")
+    public ResponseEntity<String> updateStatus(@RequestBody UpdateOrderStatusDTO dto) {
+        return ResponseEntity.ok(orderServices.updateOrderStatus(dto));
     }
 }

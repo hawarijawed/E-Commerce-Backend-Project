@@ -28,6 +28,12 @@ public class EcommerceBackendApplication {
 	public static void helper(){
 		System.out.println("Default TimeZone = " + java.util.TimeZone.getDefault().getID());
 	}
-
+    /*
+    	A) Wishlist Module
+		B) Search + Filter Module
+		C) JWT Authentication
+		D) Reviews & Ratings
+		E) Address Module
+     */
 
 }

@@ -7,8 +7,12 @@ import com.ecommerce.ecommerce_backend.service.ProductUserService;
 import com.ecommerce.ecommerce_backend.service.ReviewService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +24,8 @@ import java.util.List;
 public class ProductUserController {
     final private ProductUserService productUserService;
     final private ReviewService reviewService;
+    @Autowired
+    private AuthenticationManager authenticationManager;
     public ProductUserController(ProductUserService productUserService,
                                  ReviewService reviewService){
         this.productUserService = productUserService;
@@ -51,6 +57,9 @@ public class ProductUserController {
         log.info(String.valueOf(createReviewsDTO.getUsername()));
         log.info(String.valueOf(createReviewsDTO.getComment()));
         log.info(String.valueOf(createReviewsDTO.getRating()));
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        log.info("Username from add review: {}",username);
         Reviews reviews = reviewService.addReview(createReviewsDTO);
         if(reviews == null){
             return new ResponseEntity<>("Review could not be saved",HttpStatus.BAD_REQUEST);

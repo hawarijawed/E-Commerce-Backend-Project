@@ -4,9 +4,11 @@ import com.ecommerce.ecommerce_backend.dto.CreateUserPojo;
 import com.ecommerce.ecommerce_backend.dto.UpdateUserPojo;
 import com.ecommerce.ecommerce_backend.dto.UserPojo;
 import com.ecommerce.ecommerce_backend.models.Users;
+import com.ecommerce.ecommerce_backend.repository.CartRepository;
 import com.ecommerce.ecommerce_backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -15,7 +17,8 @@ public class UserServices {
 
     @Autowired
     private UserRepository userRepository;
-
+    @Autowired
+    private CartRepository cartRepository;
 //    public UserServices(UserRepository userRepository){
 //        this.userRepository = userRepository;
 //    }
@@ -28,7 +31,6 @@ public class UserServices {
         user.setEmail(userPojo.getEmail());
         user.setPassword(userPojo.getPassword());
         user.setPassword(userPojo.getPassword());
-        user.setRole(userPojo.getRole());
         user.setContact(userPojo.getContact());
         userRepository.save(user);
         return user;
@@ -44,9 +46,14 @@ public class UserServices {
     }
 
     //Delete by Id
+    @Transactional
     public boolean deleteById(Long id){
         if(userRepository.existsById(id)){
-            userRepository.deleteById(id);
+            cartRepository.deleteByUserId(id);
+//
+            Users users = userRepository.findById(id).orElse(null);
+            users.setEnabled(false);
+            userRepository.save(users);
             return true;
         }
 

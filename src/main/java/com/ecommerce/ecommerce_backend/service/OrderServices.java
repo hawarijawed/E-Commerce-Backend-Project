@@ -1,9 +1,6 @@
 package com.ecommerce.ecommerce_backend.service;
 
-import com.ecommerce.ecommerce_backend.dto.PlaceOrder.BuyNowDTO;
-import com.ecommerce.ecommerce_backend.dto.PlaceOrder.CheckoutOrderDTO;
-import com.ecommerce.ecommerce_backend.dto.PlaceOrder.OrderItemResponseDTO;
-import com.ecommerce.ecommerce_backend.dto.PlaceOrder.OrderResponseDTO;
+import com.ecommerce.ecommerce_backend.dto.PlaceOrder.*;
 import com.ecommerce.ecommerce_backend.models.*;
 import com.ecommerce.ecommerce_backend.repository.*;
 import lombok.extern.slf4j.Slf4j;
@@ -220,6 +217,68 @@ public class OrderServices {
         return "Order has been cancelled successfully";
     }
 
+    public OrderDetailsDTO viewOrderDetails(Long orderId, Long userId){
+        Orders order = ordersRepository.findById(orderId)
+                .orElseThrow(()->new RuntimeException("Order not found"));
+
+        //Ensure the order belongs to the user
+        if(!order.getUser().getId().equals(userId)){
+            throw new RuntimeException("Unauthorized access to order");
+        }
+
+        OrderDetailsDTO dto = new OrderDetailsDTO();
+        dto.setOrderId(order.getId());
+        dto.setOrderStatus(order.getOrderStatusEnum().toString());
+        dto.setOrderTime(order.getOrderTime());
+        dto.setPaymentMethod(order.getPaymentMethod());
+        dto.setShippingAddress(order.getShippingAddress());
+        dto.setTotalAmount(order.getTotalAmount());
+        List<OrderItemsDTO> lst = new ArrayList<>();
+
+        for(OrderItems items: order.getOrderItems()){
+            OrderItemsDTO orderItemsDTO = new OrderItemsDTO();
+            orderItemsDTO.setProductId(items.getId());
+            orderItemsDTO.setProduct(items.getProducts().getName());
+            orderItemsDTO.setQuantity(items.getQuantity());
+            orderItemsDTO.setPriceAtOrderTime(items.getPriceAtOrderTime());
+            orderItemsDTO.setTotal(items.getTotal());
+            lst.add(orderItemsDTO);
+        }
+        dto.setItems(lst);
+        log.info("Order address details {}",dto.getShippingAddress());
+        return dto;
+    }
+
+    //update OrderStatus, Admin access only
+    public String updateOrderStatus(UpdateOrderStatusDTO dto){
+        Orders order = ordersRepository.findById(dto.getOrderId())
+                .orElseThrow(()-> new RuntimeException("Order not found"));
+
+        // Rule: user cannot cancel once shipped
+        if (dto.getStatus() == OrderStatus.CANCELLED &&
+                (order.getOrderStatusEnum() == OrderStatus.SHIPPED ||
+                        order.getOrderStatusEnum() == OrderStatus.OUT_FOR_DELIVERY ||
+                        order.getOrderStatusEnum() == OrderStatus.DELIVERED)) {
+            return "Order cannot be cancelled after shipping!";
+        }
+
+        order.setOrderStatusEnum(dto.getStatus());
+        ordersRepository.save(order);
+
+        return "Order status updated to "+ dto.getStatus();
+    }
+
+    public OrderStatus trackOrder(Long orderId, Long userId){
+        Orders order = ordersRepository.findById(orderId).orElseThrow(
+                ()-> new RuntimeException("Order not found")
+        );
+
+        if(!order.getUser().getId().equals(userId)){
+            throw new RuntimeException("Unauthorized access");
+        }
+
+        return order.getOrderStatusEnum();
+    }
     /*
     To be done later
     1. Admin Update Order Status
