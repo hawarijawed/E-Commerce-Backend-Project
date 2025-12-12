@@ -31,7 +31,7 @@ public class JwtUtility {
      }
 
      public String extractEmail(String token){
-         log.info("Extract Email is called: {}",extractAllClaims(token).getSubject());
+         //log.info("Extract Email is called: {}",extractAllClaims(token).getSubject());
          return extractAllClaims(token).getSubject();
      }
 

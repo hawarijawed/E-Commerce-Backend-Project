@@ -62,5 +62,10 @@ public class UserController {
         return userServices.deleteById(id);
     }
 
+    @DeleteMapping("/delete")
+    public boolean deleteAll(){
+        return userServices.deleteAll();
+    }
+
 
 }
