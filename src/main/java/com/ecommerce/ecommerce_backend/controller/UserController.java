@@ -1,19 +1,26 @@
 package com.ecommerce.ecommerce_backend.controller;
 
+import com.ecommerce.ecommerce_backend.dto.ChangePassword.ForgotPasswordDTO;
+import com.ecommerce.ecommerce_backend.dto.ChangePassword.PasswordResetDTO;
+import com.ecommerce.ecommerce_backend.dto.ChangePassword.UpdatePasswordDTO;
 import com.ecommerce.ecommerce_backend.dto.CreateUserPojo;
 import com.ecommerce.ecommerce_backend.dto.UpdateUserPojo;
 import com.ecommerce.ecommerce_backend.dto.UserPojo;
 import com.ecommerce.ecommerce_backend.models.Users;
 import com.ecommerce.ecommerce_backend.service.UserServices;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.graphql.GraphQlProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
@@ -67,5 +74,28 @@ public class UserController {
         return userServices.deleteAll();
     }
 
+    @PutMapping("/password-update")
+    public ResponseEntity<String> updatePassword(@RequestBody UpdatePasswordDTO updatePasswordDTO){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        log.info("Authentication from update password: {}",authentication);
+        String res = userServices.updatePassword(authentication.getName(), updatePasswordDTO);
+
+        return  ResponseEntity.ok(res);
+    }
+
+    @PostMapping("/password-forgot")
+    public ResponseEntity<String> forgotPassword(@RequestBody ForgotPasswordDTO forgotPasswordDTO){
+
+        userServices.processForgotPassword(forgotPasswordDTO.getEmail());
+        return ResponseEntity.ok("Password reset link sent");
+    }
+
+    @PostMapping("/password-reset")
+    public ResponseEntity<String> resetPassword(@RequestBody PasswordResetDTO passwordResetDTO){
+
+        String res = userServices.resetPassword(passwordResetDTO);
+
+        return ResponseEntity.ok(res);
+    }
 
 }

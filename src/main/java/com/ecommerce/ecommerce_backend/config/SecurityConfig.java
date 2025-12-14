@@ -47,6 +47,8 @@ public class SecurityConfig {
                         auth -> auth
                                 .requestMatchers("/auth/**").permitAll()
                                 .requestMatchers(HttpMethod.GET,"/api/product/user/**").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/api/user/password-forgot", "/api/user/password-reset").permitAll()
+                                .requestMatchers(HttpMethod.PUT, "api/user/password-update").authenticated()
                                 .requestMatchers(HttpMethod.POST,"/api/product/user/**").authenticated()
                                 .requestMatchers("/api/product/admin/**").hasRole("ADMIN")
                                 .requestMatchers("/api/user/**").hasRole("ADMIN")

@@ -75,4 +75,13 @@ public class EmailService {
         }
         //log.info("Email is sent to respective user");
     }
+
+    public void send(String sendTo, String subject, String text){
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(sendTo);
+        message.setSubject(subject);
+        message.setText(text);
+        message.setFrom("hawarijawed143@gmail.com");
+        mailSender.send(message);
+    }
 }
